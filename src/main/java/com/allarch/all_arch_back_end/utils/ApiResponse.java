@@ -28,14 +28,14 @@ public class ApiResponse<T> implements Serializable {
     public static <T> ResponseEntity<ApiResponse<T>> badRequest(T body) {
         return new ResponseEntity<>(
                 new ApiResponse<>(BAD_REQUEST, "BAD_REQUEST", body),
-                HttpStatus.BAD_REQUEST
+                HttpStatus.OK
         );
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> serverError(T body) {
         return new ResponseEntity<>(
                 new ApiResponse<>(SERVER_ERROR, "SERVER_ERROR", body),
-                HttpStatus.INTERNAL_SERVER_ERROR
+                HttpStatus.OK
         );
     }
 }

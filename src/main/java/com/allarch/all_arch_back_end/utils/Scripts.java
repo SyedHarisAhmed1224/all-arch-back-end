@@ -19,4 +19,10 @@ public class Scripts {
                     CALL SaveUserSession(?, ?)
                 """;
     }
+
+    public static String getLoginQuery() {
+        return """
+                    SELECT 1 FROM Users WHERE EmailAddress = ? AND Password = ?;
+        """;
+    }
 }

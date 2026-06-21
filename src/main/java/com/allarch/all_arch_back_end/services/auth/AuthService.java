@@ -1,14 +1,16 @@
 package com.allarch.all_arch_back_end.services.auth;
 
+import com.allarch.all_arch_back_end.models.auth.LoginRequest;
 import com.allarch.all_arch_back_end.models.auth.SignUpRequest;
+import com.allarch.all_arch_back_end.models.user.UserTokenRequest;
+import com.allarch.all_arch_back_end.services.user.UserService;
 import com.allarch.all_arch_back_end.utils.ApiResponse;
 import com.allarch.all_arch_back_end.utils.SQL;
 import com.allarch.all_arch_back_end.utils.Scripts;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AuthService {
@@ -16,7 +18,10 @@ public class AuthService {
     @Autowired
     private SQL sql;
 
-    public ResponseEntity register(@RequestBody SignUpRequest signUpRequest) {
+    @Autowired
+    private UserService userService;
+
+    public ResponseEntity register(SignUpRequest signUpRequest) {
         var res = sql.executeQueryOnce(
                 Scripts.registerQuery(),
                 signUpRequest.getEmailAddress(),
@@ -35,6 +40,20 @@ public class AuthService {
         }
 
         return ApiResponse.success("User Created");
+    }
+
+    public ResponseEntity login(LoginRequest loginRequest, HttpServletResponse response) {
+        var res = sql.execute(Scripts.getLoginQuery(), loginRequest.getEmailAddress(), loginRequest.getPassword());
+
+        if (res == null) {
+            return ApiResponse.serverError("Internal Server Error");
+        }
+
+        if (res.size() == 0) {
+            return ApiResponse.badRequest("Invalid Login Details");
+        }
+
+        return userService.generateToken(new UserTokenRequest(loginRequest.getEmailAddress()), response);
     }
 
 }
