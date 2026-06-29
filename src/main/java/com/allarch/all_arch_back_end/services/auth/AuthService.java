@@ -22,38 +22,48 @@ public class AuthService {
     private UserService userService;
 
     public ResponseEntity register(SignUpRequest signUpRequest) {
-        var res = sql.executeQueryOnce(
-                Scripts.registerQuery(),
-                signUpRequest.getEmailAddress(),
-                signUpRequest.getPassword(),
-                signUpRequest.getFirstName(),
-                signUpRequest.getLastName(),
-                signUpRequest.getInterestFieldID()
-        );
+        try {
+            var res = sql.executeQueryOnce(
+                    Scripts.registerQuery(),
+                    signUpRequest.getEmailAddress(),
+                    signUpRequest.getPassword(),
+                    signUpRequest.getFirstName(),
+                    signUpRequest.getLastName(),
+                    signUpRequest.getInterestFieldID()
+            );
 
-        if (res == null) {
-            return ApiResponse.serverError("Internal Server Error");
+            if (res == null) {
+                return ApiResponse.serverError("Internal Server Error");
+            }
+
+            if (res == 0) {
+                return ApiResponse.badRequest("Bad Request");
+            }
+
+            return ApiResponse.success("User Created");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.serverError(e.getMessage());
         }
-
-        if (res == 0) {
-            return ApiResponse.badRequest("Bad Request");
-        }
-
-        return ApiResponse.success("User Created");
     }
 
     public ResponseEntity login(LoginRequest loginRequest, HttpServletResponse response) {
-        var res = sql.execute(Scripts.getLoginQuery(), loginRequest.getEmailAddress(), loginRequest.getPassword());
+        try {
+            var res = sql.execute(Scripts.getLoginQuery(), loginRequest.getEmailAddress(), loginRequest.getPassword());
 
-        if (res == null) {
+            if (res == null) {
+                return ApiResponse.serverError("Internal Server Error");
+            }
+
+            if (res.size() == 0) {
+                return ApiResponse.badRequest("Invalid Login Details");
+            }
+
+            return userService.generateToken(new UserTokenRequest(loginRequest.getEmailAddress()), response);
+        } catch (Exception e) {
+            e.printStackTrace();
             return ApiResponse.serverError("Internal Server Error");
         }
-
-        if (res.size() == 0) {
-            return ApiResponse.badRequest("Invalid Login Details");
-        }
-
-        return userService.generateToken(new UserTokenRequest(loginRequest.getEmailAddress()), response);
     }
 
 }

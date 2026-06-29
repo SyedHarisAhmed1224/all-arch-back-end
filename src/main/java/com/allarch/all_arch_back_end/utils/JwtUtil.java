@@ -18,7 +18,8 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET;
 
-    private final long EXPIRATION = 1000 * 60 * 60;
+    /* milliseconds * minutes * hours * multiplier Current Expiry -> 1 hour */
+    private final long EXPIRATION = 1000 * 60 * 60 * 1;
 
     private SecretKey KEY;
 
@@ -27,9 +28,10 @@ public class JwtUtil {
         KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, int userId) {
         return Jwts.builder()
                 .subject(email)
+                .claim("userId", userId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(KEY)

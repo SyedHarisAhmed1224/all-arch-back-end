@@ -30,7 +30,7 @@ public class UserService {
         try {
             var userID = Integer.parseInt(res.get(0).get("UserID").toString());
 
-            var token = jwtUtil.generateToken(userTokenRequest.getEmail());
+            var token = jwtUtil.generateToken(userTokenRequest.getEmail(), userID);
 
             var tokenRes = sql.executeQueryOnce(Scripts.getUpdateUserSessionQuery(), userID, token);
 

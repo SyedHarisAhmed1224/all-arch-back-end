@@ -16,9 +16,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "http://192.168.100.7:3000"
+                "https://localhost:3000",
+                "https://127.0.0.1:3000",
+                "https://192.168.100.7:3000"
         ));
 
         config.setAllowedMethods(List.of(

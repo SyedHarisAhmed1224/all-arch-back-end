@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/allarch/auth/**", "/allarch/user/generate-token").permitAll()
+                        .requestMatchers("/allarch/auth/**", "/allarch/user/generate-token", "/allarch/landing-page/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

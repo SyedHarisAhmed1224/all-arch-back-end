@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         logger.info("path: " + path);
 
-        if (path.startsWith("/allarch/auth") || path.startsWith("/allarch/user/generate-token")) {
+        if (path.startsWith("/allarch/auth") || path.startsWith("/allarch/user/generate-token") || path.startsWith("/allarch/landing-page")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -64,10 +64,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Claims claims = jwtUtil.validateToken(token);
 
             String email = claims.getSubject();
+            Integer userId = claims.get("userId", Integer.class);
+
+            CustomUserPrincipal principal =
+                    new CustomUserPrincipal(
+                            userId,
+                            email
+                    );
 
             UsernamePasswordAuthenticationToken authentication =
                     UsernamePasswordAuthenticationToken.authenticated(
-                            email,
+                            principal,
                             null,
                             AuthorityUtils.NO_AUTHORITIES
                     );
