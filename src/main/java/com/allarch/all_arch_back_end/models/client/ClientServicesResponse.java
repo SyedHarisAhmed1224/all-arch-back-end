@@ -10,5 +10,6 @@ public class ClientServicesResponse {
     private String title;
     private String info;
     private String type;
+    private int hasForm;
     private double amount;
 }

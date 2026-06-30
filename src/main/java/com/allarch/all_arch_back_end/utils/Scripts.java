@@ -31,7 +31,7 @@ public class Scripts {
 
     public static String getClientServicesQuery() {
         return """
-                SELECT a.ClientServiceID, a.Icon, a.ServiceName, a.Description, b.TypeName, a.Amount
+                SELECT a.ClientServiceID, a.Icon, a.ServiceName, a.Description, b.TypeName, a.Amount, a.HasForm
                 FROM   ClientServices a, ClientServiceTypes b
                 WHERE  a.Type   = b.ClientServiceTypeID
                 AND    a.Status = 0

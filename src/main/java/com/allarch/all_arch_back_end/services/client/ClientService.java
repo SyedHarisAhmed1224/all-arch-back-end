@@ -37,6 +37,7 @@ public class ClientService {
                     data.get("ServiceName").toString(),
                     data.get("Description").toString(),
                     data.get("TypeName").toString(),
+                    Integer.parseInt(data.get("HasForm").toString()),
                     Double.parseDouble(data.get("Amount").toString())
             ));
         }
