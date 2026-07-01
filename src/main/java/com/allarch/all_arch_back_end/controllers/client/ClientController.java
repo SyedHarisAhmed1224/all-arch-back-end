@@ -33,4 +33,9 @@ public class ClientController {
     public ResponseEntity getContractInfo(@RequestParam("contract_id") int contractId) {
         return clientService.getContractInfo(contractId);
     }
+
+    @RequestMapping(value = "/get-contracts", method = GET)
+    public ResponseEntity getContracts() {
+        return clientService.getContracts();
+    }
 }

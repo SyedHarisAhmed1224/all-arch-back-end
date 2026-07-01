@@ -125,4 +125,33 @@ public class ClientService {
             return ApiResponse.serverError("Server Error, contact support!");
         }
     }
+
+    public ResponseEntity getContracts() {
+        try {
+            var userId = SecurityUtils.getCurrentUserId();
+
+            var query = Scripts.getContractsQuery();
+
+            var res = sql.execute(query, userId);
+
+            if (res == null) {
+                return ApiResponse.serverError("Server Error, contact support!");
+            }
+
+            if (res.size() <= 0) {
+                return ApiResponse.badRequest("Invalid user id!");
+            }
+
+            var contractIDs = new Integer[res.size()];
+
+            for (int i = 0; i < res.size(); i++) {
+                contractIDs[i] = Integer.parseInt(res.get(i).get("ContractID").toString());
+            }
+
+            return ApiResponse.success(contractIDs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.serverError("Server Error, contact support!");
+        }
+    }
 }

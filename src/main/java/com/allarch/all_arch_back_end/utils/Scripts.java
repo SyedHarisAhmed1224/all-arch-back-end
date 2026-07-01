@@ -65,4 +65,10 @@ public class Scripts {
                 EXEC GetClientContractInfo @UserID = ?, @ContractID = ?
                 """;
     }
+
+    public static String getContractsQuery() {
+        return """
+                EXEC GetClientContracts @UserID = ?
+                """;
+    }
 }
