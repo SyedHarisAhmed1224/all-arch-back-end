@@ -5,9 +5,9 @@ import com.allarch.all_arch_back_end.utils.ApiResponse;
 import com.allarch.all_arch_back_end.utils.JwtUtil;
 import com.allarch.all_arch_back_end.utils.SQL;
 import com.allarch.all_arch_back_end.utils.Scripts;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +38,16 @@ public class UserService {
                 return ApiResponse.badRequest("User Not Found");
             }
 
-            Cookie cookie = new Cookie("ACCESS_TOKEN", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(60 * 60);
+            ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", token)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .domain("allarachacademy.com")
+                    .sameSite("Lax")
+                    .maxAge(60 * 60)
+                    .build();
 
-            response.addCookie(cookie);
+            response.addHeader("Set-Cookie", cookie.toString());
 
             return ApiResponse.success("Success");
         } catch (Exception e) {

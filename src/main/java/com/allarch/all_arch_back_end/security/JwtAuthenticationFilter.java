@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (token == null) {
+            logger.info("Access Token Missing or Invalid");
             response.sendError(
                     HttpServletResponse.SC_UNAUTHORIZED,
                     "Access Token Missing or Invalid"
