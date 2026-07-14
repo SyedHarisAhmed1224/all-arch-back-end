@@ -40,9 +40,10 @@ public class UserService {
 
             ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", token)
                     .httpOnly(true)
-                    .secure(true)
+//                    .secure(true)
                     .path("/")
-                    .domain("allarachacademy.com")
+                    .domain("192.168.100.7")
+//                    .domain("allarachacademy.com")
                     .sameSite("Lax")
                     .maxAge(60 * 60)
                     .build();
